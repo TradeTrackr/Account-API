@@ -19,10 +19,3 @@ async def get_user(id: str, db: AsyncSession = Depends(get_db)) -> dict:
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
     return {"user": user}
-
-@user_route.get("/", status_code=200)
-def root() -> dict:
-    """
-    Root Get
-    """
-    return {"msg": "Hello, World!"}
