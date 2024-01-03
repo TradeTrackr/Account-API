@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from app.models import User, Trader
-from .routers.trader import trader_route
+from .routers.trader import trader_route, user_route
 
 app = FastAPI()
 
 app.include_router(trader_route, prefix="/trader")
+app.include_router(user_route, prefix="/user")
 
 if __name__ == "__main__":
     import uvicorn

@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, create_engine
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.ext.declarative import declarative_base
 
 Base = declarative_base()
@@ -9,7 +9,8 @@ class User(Base):
     id = Column(Integer, primary_key=True, index=True)
     full_name = Column(String, index=True)
     email = Column(String, unique=True, index=True)
-    phone_number = Column(Integer, index=True)
+    phone_number = Column(String, index=True)
+    trader_id = Column(String, ForeignKey('traders.id'))
 
 class Trader(Base):
     __tablename__ = 'traders'
