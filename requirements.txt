@@ -7,3 +7,7 @@ email-validator
 alembic
 python-dotenv
 sqlalchemy
+pyjwt
+pydantic
+requests
+python-jose[cryptography]

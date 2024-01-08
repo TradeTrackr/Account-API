@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from app.models import User, Trader
-from .routers.trader import trader_route, user_route
+from .routers.trader import trader_route
+from .routers.user import user_route
 
 app = FastAPI()
 

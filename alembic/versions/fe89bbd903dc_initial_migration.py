@@ -1,8 +1,8 @@
-"""Added user model
+"""initial migration
 
-Revision ID: e7820df619f5
+Revision ID: fe89bbd903dc
 Revises: 
-Create Date: 2024-01-03 13:43:44.517138
+Create Date: 2024-01-04 16:45:59.121571
 
 """
 from typing import Sequence, Union
@@ -12,7 +12,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision: str = 'e7820df619f5'
+revision: str = 'fe89bbd903dc'
 down_revision: Union[str, None] = None
 branch_labels: Union[str, Sequence[str], None] = None
 depends_on: Union[str, Sequence[str], None] = None
@@ -24,16 +24,20 @@ def upgrade() -> None:
     sa.Column('id', sa.String(), nullable=False),
     sa.Column('company_name', sa.String(), nullable=True),
     sa.Column('email', sa.String(), nullable=True),
+    sa.Column('company_url', sa.String(), nullable=True),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_traders_company_name'), 'traders', ['company_name'], unique=False)
+    op.create_index(op.f('ix_traders_company_url'), 'traders', ['company_url'], unique=False)
     op.create_index(op.f('ix_traders_email'), 'traders', ['email'], unique=True)
     op.create_index(op.f('ix_traders_id'), 'traders', ['id'], unique=False)
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('full_name', sa.String(), nullable=True),
     sa.Column('email', sa.String(), nullable=True),
-    sa.Column('phone_number', sa.Integer(), nullable=True),
+    sa.Column('phone_number', sa.String(), nullable=True),
+    sa.Column('trader_id', sa.String(), nullable=True),
+    sa.ForeignKeyConstraint(['trader_id'], ['traders.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_index(op.f('ix_users_email'), 'users', ['email'], unique=True)
@@ -52,6 +56,7 @@ def downgrade() -> None:
     op.drop_table('users')
     op.drop_index(op.f('ix_traders_id'), table_name='traders')
     op.drop_index(op.f('ix_traders_email'), table_name='traders')
+    op.drop_index(op.f('ix_traders_company_url'), table_name='traders')
     op.drop_index(op.f('ix_traders_company_name'), table_name='traders')
     op.drop_table('traders')
     # ### end Alembic commands ###
