@@ -13,5 +13,13 @@ class Trader(BaseModel):
     company_name: str
     email: EmailStr
 
+
 class TokenData(BaseModel):
     access_token: str
+
+
+class Category(BaseModel):
+    id: int
+    category: str
+    colour: str
+    trader_id: str
