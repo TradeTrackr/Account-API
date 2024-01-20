@@ -11,7 +11,8 @@ class Trader(Base):
     company_name = Column(String, index=True)
     email = Column(String, unique=True, index=True)
     company_url = Column(String, index=True)
-
+    company_logo_url = Column(String, index=True)
+    company_response_email = Column(String, index=True)
 
 class User(Base):
     __tablename__ = 'users'
