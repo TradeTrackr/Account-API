@@ -5,7 +5,7 @@ from app import models
 from sqlalchemy import select
 
 
-async def get_trader_by_id(db: Session, trader_id: int):
+async def get_trader_by_id(db: Session, trader_id: str):
     return await db.get(models.Trader, trader_id)
 
 async def get_user_by_id(db: Session, user_id: int, company_id: str):
@@ -16,7 +16,7 @@ async def find_account_by_email(db: Session, email: str):
     return result.scalars().all()
 
 async def get_user_by_trader_id(db: Session, company_id: str):
-    result = await db.execute(select(models.User).where(models.User.trader_id == id))
+    result = await db.execute(select(models.User).where(models.User.trader_id == company_id))
     return result.scalars().all()
 
 async def get_categories_for_trader(db: Session, id: str):

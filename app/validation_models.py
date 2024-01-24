@@ -1,4 +1,5 @@
 from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 
 class User(BaseModel):
@@ -23,3 +24,15 @@ class Category(BaseModel):
     category: str
     colour: str
     trader_id: str
+
+
+class TraderModel(BaseModel):
+    id: Optional[str] = None
+    company_name: str
+    email: str
+    company_url: str
+    company_logo_url: str
+    company_response_email: str
+
+    class Config:
+        orm_mode = True
