@@ -5,21 +5,32 @@ from typing import Optional
 from fastapi import HTTPException, Depends, status
 from jose import jwt, JWTError
 from pydantic import ValidationError
+from datetime import datetime, timedelta
 
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 class Authentication(object):
+
+    def generate_magic_link(self, email, url):
+        payload = {
+            "email": email,
+            "exp": datetime.utcnow() + config.MAGIC_LINK_EXPIRE_MINUTES
+        }
+        token = jwt.encode(payload, config.JWT_SECRET_KEY, algorithm=config.ALGORITHM)
+        magic_link = f"{url}/auth?token={token}"
+        return magic_link
+
     def create_access_token(self, data: dict):
         to_encode = data.copy()
         to_encode.update({"exp": jwt.datetime.utcnow() + jwt.timedelta(minutes=int(config.ACCESS_TOKEN_EXPIRE_MINUTES))})
         encoded_jwt = jwt.encode(to_encode, config.JWT_SECRET_KEY, algorithm=config.ALGORITHM)
         return encoded_jwt
 
-    def create_refresh_token(self, data: dict, expires_delta: Optional[datetime.timedelta] = None):
+    def create_refresh_token(self, data: dict, expires_delta: Optional[timedelta] = None):
         to_encode = data.copy()
         if expires_delta is None:
-            expires_delta = datetime.timedelta(days=int(config.REFRESH_TOKEN_EXPIRE_DAYS))
-        expire = datetime.datetime.utcnow() + expires_delta
+            expires_delta = timedelta(days=int(config.REFRESH_TOKEN_EXPIRE_DAYS))
+        expire = datetime.utcnow() + expires_delta
         to_encode.update({"exp": expire})
         encoded_jwt = jwt.encode(to_encode, config.JWT_SECRET_KEY, algorithm=config.ALGORITHM)
         return encoded_jwt

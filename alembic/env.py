@@ -9,10 +9,12 @@ from app.models import Base
 # access to the values within the .ini file in use.
 config = context.config
 import os
+import urllib.parse
+
 
 
 SQLALCHEMY_USER = os.environ['SQLALCHEMY_USER']
-SQLALCHEMY_PASSWORD = os.environ['SQLALCHEMY_PASSWORD']
+SQLALCHEMY_PASSWORD = urllib.parse.quote_plus(os.environ['SQLALCHEMY_PASSWORD']).replace('%40', '%%40')
 SQLALCHEMY_HOST = os.environ['SQLALCHEMY_HOST']
 SQLALCHEMY_PORT = os.environ['SQLALCHEMY_PORT']
 SQLALCHEMY_DB = os.environ['SQLALCHEMY_DB']
@@ -21,11 +23,13 @@ SQLALCHEMY_DATABASE_URI = postgresql_string.format(SQLALCHEMY_USER, SQLALCHEMY_P
 
 
 config.set_main_option("sqlalchemy.url", SQLALCHEMY_DATABASE_URI)
-
+print(SQLALCHEMY_DATABASE_URI)
+print('***********')
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
+
 
 # add your model's MetaData object here
 # for 'autogenerate' support

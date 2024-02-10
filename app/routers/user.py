@@ -1,11 +1,19 @@
 from fastapi import APIRouter, HTTPException, Depends
 import jwt
 from app import config
-from app.utilities.crud import get_user_by_id, get_user_by_trader_id, find_account_by_email
+from app.utilities.crud import find_account_by_email, get_user_by_id, get_user_by_trader_id
 from app.utilities.db import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
+from app.utilities.authentication import Authentication
 
 user_route = APIRouter()
+
+@user_route.get("get_magic_link")
+def validate_email(email: str, url, str):
+    # Logic to check if email exists in accounts
+    # For example:
+    magic_link = Authentication().generate_magic_link(email, url)
+    return {"magic_link": magic_link}
 
 @user_route.get("/validate-email")
 def validate_email(email: str):

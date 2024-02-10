@@ -5,6 +5,13 @@ from app import models
 from sqlalchemy import select
 
 
+async def get_trader_pub(db: Session, trader_id: str):
+    query = select(models.Trader.company_url, models.Trader.company_name, models.Trader.email, models.Trader.company_response_email, models.Trader.company_logo_url).where(models.Trader.id == trader_id)
+    result = await db.execute(query)
+    
+    # Extracting the desired fields from each row into a dictionary
+    return result.scalars().all()
+
 async def get_trader_by_id(db: Session, trader_id: str):
     return await db.get(models.Trader, trader_id)
 

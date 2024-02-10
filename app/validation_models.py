@@ -7,6 +7,7 @@ class User(BaseModel):
     full_name: str
     email: EmailStr
     phone_number: int
+    user_type: str
 
 
 class Trader(BaseModel):

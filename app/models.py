@@ -22,6 +22,7 @@ class User(Base):
     email = Column(String, unique=True, index=True)
     phone_number = Column(String, index=True)
     trader_id = Column(String, ForeignKey('traders.id'))
+    user_type = Column(String, index=True)
 
 
 class Category(Base):
