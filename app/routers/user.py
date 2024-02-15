@@ -5,20 +5,20 @@ from app.utilities.crud import find_account_by_email, get_user_by_id, get_user_b
 from app.utilities.db import get_db
 from sqlalchemy.ext.asyncio import AsyncSession
 from app.utilities.authentication import Authentication
+from app.validation_models import ClientMagicLink
 
 user_route = APIRouter()
 
-@user_route.get("get_magic_link")
-def validate_email(email: str, url, str):
-    # Logic to check if email exists in accounts
-    # For example:
-    magic_link = Authentication().generate_magic_link(email, url)
+@user_route.get("/get_magic_link")
+def validate_email(client: ClientMagicLink):
+
+    print(client.email)
+    magic_link = Authentication().generate_magic_link(client.email, client.url)
     return {"magic_link": magic_link}
 
 @user_route.get("/validate-email")
 def validate_email(email: str):
-    # Logic to check if email exists in accounts
-    # For example:
+
     account = find_account_by_email(email)
     if account:
         return {"status": "ok"}

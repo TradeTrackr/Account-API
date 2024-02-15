@@ -20,6 +20,15 @@ class TokenData(BaseModel):
     access_token: str
 
 
+class TraderURLModel(BaseModel):
+    url: str
+
+
+class ClientMagicLink(BaseModel):
+    url: str
+    email: EmailStr
+
+
 class Category(BaseModel):
     id: int
     category: str

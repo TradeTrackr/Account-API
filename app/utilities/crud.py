@@ -6,11 +6,21 @@ from sqlalchemy import select
 
 
 async def get_trader_pub(db: Session, trader_id: str):
-    query = select(models.Trader.company_url, models.Trader.company_name, models.Trader.email, models.Trader.company_response_email, models.Trader.company_logo_url).where(models.Trader.id == trader_id)
+    query = select(models.Trader.company_url, 
+                   models.Trader.company_name, 
+                   models.Trader.email, 
+                   models.Trader.company_response_email, 
+                   models.Trader.company_logo_url).where(models.Trader.id == trader_id)
     result = await db.execute(query)
     
-    # Extracting the desired fields from each row into a dictionary
-    return result.scalars().all()
+    # Fetching the first result if available
+    trader = result.scalars().first()
+
+    return trader
+
+async def get_trader_by_url(db: Session, url: str):
+    result = await db.execute(select(models.Trader).where(models.Trader.company_url == url))
+    return result.scalars().first()
 
 async def get_trader_by_id(db: Session, trader_id: str):
     return await db.get(models.Trader, trader_id)

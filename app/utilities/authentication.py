@@ -12,9 +12,13 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 class Authentication(object):
 
     def generate_magic_link(self, email, url):
+
+        expiration_duration = int(config.MAGIC_LINK_EXPIRE_MINUTES)
+        expiration_time = datetime.utcnow() + timedelta(minutes=expiration_duration)
+
         payload = {
             "email": email,
-            "exp": datetime.utcnow() + config.MAGIC_LINK_EXPIRE_MINUTES
+            "exp": expiration_time
         }
         token = jwt.encode(payload, config.JWT_SECRET_KEY, algorithm=config.ALGORITHM)
         magic_link = f"{url}/auth?token={token}"
